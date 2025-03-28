@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>可爱的度假海岛预约</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#FF9ECD',
+secondary: '#95E1D3'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.font-zcool { font-family: 'ZCOOL KuaiLe', sans-serif; }
+@keyframes float {
+0% { transform: translateY(0px); }
+50% { transform: translateY(-10px); }
+100% { transform: translateY(0px); }
+}
+.float-animation { animation: float 3s ease-in-out infinite; }
+.modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+z-index: 1000;
+}
+.modal-content {
+background-color: white;
+padding: 2rem;
+border-radius: 1rem;
+max-width: 500px;
+width: 90%;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+.text-shadow-cute {
+    text-shadow: 2px 2px 8px rgba(255, 158, 205, 0.6),  /* 柔和的粉色阴影 */
+                 1px 1px 3px rgba(0, 0, 0, 0.3);        /* 深色阴影提高可读性 */
+}
+</style>
+</head>
+<body class="bg-[#FFF5F9] min-h-screen">
+<main>
+<section class="hero relative h-[600px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0">
+<img src="https://public.readdy.ai/ai/img_res/4d92c57abd9165089245fb00182a0489.jpg"
+class="w-full h-full object-cover" alt="海岛背景">
+</div>
+<div class="relative text-center text-white z-10">
+<h1 class="text-6xl font-zcool mb-6 text-shadow-cute">欢迎来到梦幻海岛</h1>
+<p class="text-xl mb-8 text-shadow-cute">在这里，开启您的休闲放松之旅</p>
+<button onclick="scrollToIslands()" class="bg-primary hover:bg-opacity-90 text-white px-8 py-3 rounded-button text-lg font-zcool cursor-pointer whitespace-nowrap transition-all transform hover:scale-105">
+开始探索 <i class="ri-arrow-right-line ml-2"></i>
+</button>
+</div>
+</section>
+<section id="islands" class="py-20 container mx-auto px-4">
+<h2 class="text-4xl font-zcool text-center mb-16">选择您的度假海岛</h2>
+<div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+<div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:translate-y-[-10px] transition-transform duration-300 cursor-pointer" onclick="showIslandDetails('guanguan')">
+<img src="https://public.readdy.ai/ai/img_res/d2ba8fa1828099fb75587f5c35cc82fa.jpg"
+class="w-full h-64 object-cover" alt="GuanGuan Island">
+<div class="p-6">
+<h3 class="text-2xl font-zcool mb-3">GuanGuan Island</h3>
+<p class="text-gray-600 mb-4">这是由guanguan建立的一个充满治愈能量的温馨海岛，这里有最专业的SPA服务和最轻松的度假氛围。</p>
+<button class="bg-primary hover:bg-opacity-90 text-white px-6 py-2 rounded-button font-zcool cursor-pointer whitespace-nowrap">
+查看详情 <i class="ri-arrow-right-line ml-2"></i>
+</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:translate-y-[-10px] transition-transform duration-300 cursor-pointer" onclick="showIslandDetails('chongguanguan')">
+<img src="https://public.readdy.ai/ai/img_res/a27224be16c9c9122509cc7052e40c6d.jpg"
+class="w-full h-64 object-cover" alt="ChongGuanGuan Island">
+<div class="p-6">
+<h3 class="text-2xl font-zcool mb-3">ChongGuanGuan Island</h3>
+<p class="text-gray-600 mb-4">这是由非常宠罐罐的Shary建立的一个充满欢乐活力的游乐海岛，这里有丰富的娱乐项目和金币库。</p>
+<button class="bg-secondary hover:bg-opacity-90 text-white px-6 py-2 rounded-button font-zcool cursor-pointer whitespace-nowrap">
+查看详情 <i class="ri-arrow-right-line ml-2"></i>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<div id="bookingModal" class="modal">
+<div class="modal-content">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-zcool">预约服务</h3>
+<button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+<i class="ri-close-line text-2xl"></i>
+</button>
+</div>
+<form id="bookingForm" onsubmit="submitBooking(event)">
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">选择日期</label>
+<input type="date" id="bookingDate" class="w-full px-4 py-2 rounded-button border border-gray-300" required>
+</div>
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">选择时间</label>
+<select id="bookingTime" class="w-full px-4 py-2 rounded-button border border-gray-300" required>
+    <option value="">请选择时间段</option>
+    <option value="morning">上午 (8:00-12:00)</option>
+    <option value="afternoon">下午 (13:00-17:00)</option>
+    <option value="evening">晚上 (18:00-23:00)</option>
+</select>
+</div>
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">选择项目</label>
+<div class="grid grid-cols-2 gap-3" id="activityOptions">
+  <!-- 这里的选项将通过 JavaScript 动态更新 -->
+</div>
+</div>
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">备注信息</label>
+<textarea id="bookingNotes" class="w-full px-4 py-2 rounded-button border border-gray-300" rows="3"></textarea>
+</div>
+<button type="submit" class="w-full bg-primary hover:bg-opacity-90 text-white py-3 rounded-button font-zcool cursor-pointer whitespace-nowrap">
+确认预约 <i class="ri-check-line ml-2"></i>
+</button>
+<input type="hidden" id="selectedIsland" name="selectedIsland">
+</form>
+</div>
+</div>
+<footer class="bg-white py-8 mt-20">
+<div class="container mx-auto px-4 text-center">
+<div class="text-2xl font-['Pacifico'] text-primary mb-4">Shary&&Charlotte</div>
+<p class="text-gray-600">© 2025 梦幻海岛度假村. All rights reserved.</p>
+</div>
+</footer>
+<script>
+function scrollToIslands() {
+document.getElementById('islands').scrollIntoView({ behavior: 'smooth' });
+}
+function showIslandDetails(island) {
+    // 存储选中的岛屿
+    document.getElementById('selectedIsland').value = island;
+    
+    const activities = {
+        'guanguan': [
+            {id: 'basic', label: '瓜瓜基础护理15min'},
+            {id: 'advanced', label: '瓜瓜深度护理30min'},
+            {id: 'bubble', label: '泡泡浴30min'},
+            {id: 'emotion', label: '坏情绪回收站'},
+            {id: 'praise', label: '夸夸小铺'},
+            {id: 'game30', label: '快乐游戏30min'},
+            {id: 'game60', label: '快乐游戏60min'}
+        ],
+        'chongguanguan': [
+            {id: 'basic', label: '瓜瓜基础护理15min'},
+            {id: 'advanced', label: '瓜瓜深度护理30min'},
+            {id: 'bubble', label: '泡泡浴30min'},
+            {id: 'angry', label: '生气罐罐回收站'},
+            {id: 'coins', label: '爆金币'},
+            {id: 'game30', label: '快乐游戏30min'},
+            {id: 'game60', label: '快乐游戏60min'}
+        ]
+    };
+
+    // 更新选项
+    const optionsContainer = document.getElementById('activityOptions');
+    optionsContainer.innerHTML = activities[island]
+        .map(activity => `
+            <div class="flex items-center">
+                <input type="checkbox" id="${activity.id}" name="activity" value="${activity.id}" class="mr-2">
+                <label for="${activity.id}" class="text-gray-700">${activity.label}</label>
+            </div>
+        `).join('');
+
+    document.getElementById('bookingModal').style.display = 'block';
+}
+function closeModal() {
+document.getElementById('bookingModal').style.display = 'none';
+}
+function submitBooking(event) {
+    event.preventDefault();
+    
+    // 获取表单数据
+    const selectedIsland = document.getElementById('selectedIsland').value;
+    const date = document.getElementById('bookingDate').value;
+    const time = document.getElementById('bookingTime').value;
+    const notes = document.getElementById('bookingNotes').value;
+    
+    // 获取选中的活动
+    const selectedActivities = Array.from(document.querySelectorAll('input[name="activity"]:checked'))
+        .map(checkbox => checkbox.nextElementSibling.textContent);
+    
+    // 根据不同岛屿设置接收邮箱
+    const targetEmail = selectedIsland === 'guanguan' 
+        ? 'qianpuchen@gmail.com' 
+        : 'wangshary18@gmail.com';
+    
+    // 转换时间段显示
+    const timeDisplay = {
+        'morning': '8:00-12:00',
+        'afternoon': '13:00-17:00',
+        'evening': '18:00-23:00'
+    }[time];
+    
+    // 构建邮件内容
+    const emailBody = `
+预约信息：
+岛屿：${selectedIsland === 'guanguan' ? 'GuanGuan Island' : 'ChongGuanGuan Island'}
+日期：${date}
+时间段：${timeDisplay}
+预约项目：${selectedActivities.join(', ')}
+备注：${notes}
+    `;
+    
+    // 发送邮件
+    window.location.href = `mailto:${targetEmail}?subject=新的岛屿预约&body=${encodeURIComponent(emailBody)}`;
+    
+    // 关闭预约模态框
+    closeModal();
+    
+    // 显示成功提示
+    const successModal = document.createElement('div');
+    successModal.className = 'modal';
+    successModal.style.display = 'block';
+    successModal.innerHTML = `
+        <div class="modal-content text-center">
+            <i class="ri-check-line text-6xl text-primary mb-4"></i>
+            <h3 class="text-2xl font-zcool mb-4">预约成功！</h3>
+            <p class="text-gray-600 mb-6">预约信息已发送至工作人员邮箱。</p>
+            <button onclick="this.closest('.modal').remove()" class="bg-primary hover:bg-opacity-90 text-white px-6 py-2 rounded-button font-zcool cursor-pointer whitespace-nowrap">
+                确定
+            </button>
+        </div>
+    `;
+    document.body.appendChild(successModal);
+}
+window.onclick = function(event) {
+if (event.target.className === 'modal') {
+event.target.style.display = 'none';
+}
+}
+</script>
+</body>
+</html>
