@@ -62,6 +62,8 @@ position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
+max-height: 90vh;
+overflow-y: auto;
 }
 .text-shadow {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -69,6 +71,23 @@ transform: translate(-50%, -50%);
 .text-shadow-cute {
     text-shadow: 2px 2px 8px rgba(255, 158, 205, 0.6),  /* 柔和的粉色阴影 */
                  1px 1px 3px rgba(0, 0, 0, 0.3);        /* 深色阴影提高可读性 */
+}
+#activityOptions {
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+#bookingForm {
+    display: flex;
+    flex-direction: column;
+}
+#bookingForm > button[type="submit"] {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #eee;
 }
 </style>
 </head>
@@ -170,59 +189,131 @@ function showIslandDetails(island) {
     
     const activities = {
         'guanguan': [
-            {id: 'basic', label: '瓜瓜基础护理15min'},
-            {id: 'advanced', label: '瓜瓜深度护理30min'},
-            {id: 'bubble', label: '泡泡浴30min'},
-            {id: 'emotion', label: '坏情绪回收站'},
-            {id: 'praise', label: '夸夸小铺'},
-            {id: 'game30', label: '快乐游戏30min'},
-            {id: 'game60', label: '快乐游戏60min'},
-            {id: 'hand', label: '手部保湿护理30min'},
-            {id: 'detox', label: '体液排毒30min'},
-            {id: 'design', label: '首席设计师设计+造型'},
-            {id: 'bleach', label: '全头漂发'},
-            {id: 'root', label: '发根补漂'},
-            {id: 'dye', label: '精致染发'},
-            {id: 'wings', label: '美味的鸡翅可口的鸡翅'},
-            {id: 'baby10', label: '小宝时间10min'},
-            {id: 'baby30', label: '小宝时间30min'},
-            {id: 'outdoor3', label: '户外3小时'},
-            {id: 'outdoorDay', label: '户外一整天'},
-            {id: 'food', label: '美味的外食可口的外食'},
-            {id: 'walk', label: '晚间饭后散步1小时'}
+            {
+                category: '✨ 瓜瓜的日常护理',
+                items: [
+                    {id: 'basic', label: '瓜瓜基础护理15min'},
+                    {id: 'advanced', label: '瓜瓜深度护理30min'},
+                    {id: 'bubble', label: '泡泡浴30min'},
+                    {id: 'hand', label: '手部保湿护理30min'},
+                    {id: 'detox', label: '体液排毒30min'}
+                ]
+            },
+            {
+                category: '🎀 瓜瓜的心灵治愈',
+                items: [
+                    {id: 'emotion', label: '坏情绪回收站'},
+                    {id: 'praise', label: '夸夸小铺'},
+                    {id: 'baby10', label: '小宝时间10min'},
+                    {id: 'baby30', label: '小宝时间30min'}
+                ]
+            },
+            {
+                category: '🎮 瓜瓜的快乐时光',
+                items: [
+                    {id: 'game30', label: '快乐游戏30min'},
+                    {id: 'game60', label: '快乐游戏60min'}
+                ]
+            },
+            {
+                category: '💇‍♀️ 瓜瓜的美发沙龙',
+                items: [
+                    {id: 'design', label: '首席设计师设计+造型'},
+                    {id: 'bleach', label: '全头漂发'},
+                    {id: 'root', label: '发根补漂'},
+                    {id: 'dye', label: '精致染发'}
+                ]
+            },
+            {
+                category: '🌞 瓜瓜的户外活动',
+                items: [
+                    {id: 'outdoor3', label: '户外3小时'},
+                    {id: 'outdoorDay', label: '户外一整天'},
+                    {id: 'walk', label: '晚间饭后散步1小时'}
+                ]
+            },
+            {
+                category: '🍗 瓜瓜的美食时间',
+                items: [
+                    {id: 'wings', label: '美味的鸡翅可口的鸡翅'},
+                    {id: 'food', label: '美味的外食可口的外食'}
+                ]
+            }
         ],
         'chongguanguan': [
-            {id: 'basic', label: '瓜瓜基础护理15min'},
-            {id: 'advanced', label: '瓜瓜深度护理30min'},
-            {id: 'bubble', label: '泡泡浴30min'},
-            {id: 'angry', label: '生气罐罐回收站'},
-            {id: 'coins', label: '爆金币'},
-            {id: 'game30', label: '快乐游戏30min'},
-            {id: 'game60', label: '快乐游戏60min'},
-            {id: 'hand', label: '手部保湿护理30min'},
-            {id: 'detox', label: '体液排毒30min'},
-            {id: 'best', label: 'Best清洁服务'},
-            {id: 'orange', label: '橘皮清洁服务'},
-            {id: 'design', label: '首席设计师设计+造型'},
-            {id: 'bleach', label: '全头漂发'},
-            {id: 'root', label: '发根补漂'},
-            {id: 'dye', label: '精致染发'},
-            {id: 'walk', label: '晚间饭后散步1小时'},
-            {id: 'outdoor3', label: '户外3小时'},
-            {id: 'outdoorDay', label: '户外一整天'},
-            {id: 'food', label: '美味的外食可口的外食'},
-            {id: 'cocktail', label: '美味的鸡尾酒可口的鸡尾酒'},
-            {id: 'noodles', label: '火鸡面'}
+            {
+                category: '✨ 罐罐的日常护理',
+                items: [
+                    {id: 'basic', label: '瓜瓜基础护理15min'},
+                    {id: 'advanced', label: '瓜瓜深度护理30min'},
+                    {id: 'bubble', label: '泡泡浴30min'},
+                    {id: 'hand', label: '手部保湿护理30min'},
+                    {id: 'detox', label: '体液排毒30min'}
+                ]
+            },
+            {
+                category: '🧹 罐罐的清洁服务',
+                items: [
+                    {id: 'best', label: 'Best清洁服务'},
+                    {id: 'orange', label: '橘皮清洁服务'}
+                ]
+            },
+            {
+                category: '🎀 罐罐的心情小铺',
+                items: [
+                    {id: 'angry', label: '生气罐罐回收站'},
+                    {id: 'coins', label: '爆金币'}
+                ]
+            },
+            {
+                category: '🎮 罐罐的游戏时光',
+                items: [
+                    {id: 'game30', label: '快乐游戏30min'},
+                    {id: 'game60', label: '快乐游戏60min'}
+                ]
+            },
+            {
+                category: '💇‍♀️ 罐罐的美发沙龙',
+                items: [
+                    {id: 'design', label: '首席设计师设计+造型'},
+                    {id: 'bleach', label: '全头漂发'},
+                    {id: 'root', label: '发根补漂'},
+                    {id: 'dye', label: '精致染发'}
+                ]
+            },
+            {
+                category: '🌞 罐罐的户外活动',
+                items: [
+                    {id: 'outdoor3', label: '户外3小时'},
+                    {id: 'outdoorDay', label: '户外一整天'},
+                    {id: 'walk', label: '晚间饭后散步1小时'}
+                ]
+            },
+            {
+                category: '🍜 罐罐的美食时间',
+                items: [
+                    {id: 'food', label: '美味的外食可口的外食'},
+                    {id: 'cocktail', label: '美味的鸡尾酒可口的鸡尾酒'},
+                    {id: 'noodles', label: '火鸡面'}
+                ]
+            }
         ]
     };
 
-    // 更新选项
+    // 更新选项显示方式
     const optionsContainer = document.getElementById('activityOptions');
     optionsContainer.innerHTML = activities[island]
-        .map(activity => `
-            <div class="flex items-center">
-                <input type="checkbox" id="${activity.id}" name="activity" value="${activity.id}" class="mr-2">
-                <label for="${activity.id}" class="text-gray-700">${activity.label}</label>
+        .map(category => `
+            <div class="mb-4">
+                <h4 class="font-zcool text-lg text-primary mb-2">${category.category}</h4>
+                <div class="grid grid-cols-1 gap-2">
+                    ${category.items.map(activity => `
+                        <div class="flex items-center">
+                            <input type="checkbox" id="${activity.id}" name="activity" value="${activity.id}" class="mr-2">
+                            <label for="${activity.id}" class="text-gray-700">${activity.label}</label>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         `).join('');
 
